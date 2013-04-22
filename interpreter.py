@@ -14,11 +14,6 @@ class Function(object):
         self.body = body
 
 
-class Variable(object):
-    def __init__(self, value):
-        self.value = value
-
-
 def eval_(env, ast):
     for x in ast:
         eval_external_def(env, x)
@@ -35,6 +30,13 @@ def eval_external_def(env, ast):
 
 def eval_funcdef(env, ast):
     env[ast.symbol.value] = Function(ast.parameter_list, ast.block)
+
+
+def eval_vardef(env, ast):
+    init_value = None
+    if ast.expr:
+        init_value = eval_expr(env, ast.expr)
+    env[ast.symbol.value] = init_value
 
 
 def declare_variable(env, ast):
